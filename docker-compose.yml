@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: barberhub-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: barberhub
+      POSTGRES_USER: barberhub
+      POSTGRES_PASSWORD: barberhub123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: barberhub-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+  frontend:
+    build: ./frontend
+    container_name: barberhub-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

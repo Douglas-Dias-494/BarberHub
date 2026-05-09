@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/barberhub
+    username: barberhub
+    password: barberhub123
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+jwt:
+  secret: barberhub-secret-key-super-safe
+  expiration: 86400000
