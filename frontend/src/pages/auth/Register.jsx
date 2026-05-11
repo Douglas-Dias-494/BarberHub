@@ -10,7 +10,7 @@ export default function Register() {
     name: '',
     email: '',
     password: '',
-    role: 'client'
+    role: 'CLIENT'
   })
 
   const [loading, setLoading] = useState(false)
@@ -25,7 +25,7 @@ export default function Register() {
       setLoading(true)
       setError('')
 
-      await register(form)
+      await authService.register(form)
 
       navigate('/login')
 
@@ -250,21 +250,21 @@ export default function Register() {
                   onClick={() =>
                     setForm({
                       ...form,
-                      role: 'barber'
+                      role: 'BARBER'
                     })
                   }
                   style={{
                     padding: 20,
                     borderRadius: 'var(--radius-md)',
-                    border: form.role === 'barber'
+                    border: form.role === 'BARBER'
                       ? '1px solid var(--gold)'
                       : '1px solid var(--border)',
 
-                    background: form.role === 'barber'
+                    background: form.role === 'BARBER'
                       ? 'var(--gold-dim)'
                       : 'var(--bg-card)',
 
-                    color: form.role === 'barber'
+                    color: form.role === 'BARBER'
                       ? 'var(--gold)'
                       : 'var(--text-primary)',
 

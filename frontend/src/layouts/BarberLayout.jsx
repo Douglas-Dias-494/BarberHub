@@ -8,7 +8,7 @@ export default function BarberLayout({ children }) {
       background: 'var(--bg-primary)'
     }}>
 
-      <Navbar variant="barber" />
+      <Navbar variant="BARBER" />
 
       <main style={{
         paddingTop: 32,
