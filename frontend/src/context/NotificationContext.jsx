@@ -12,7 +12,7 @@ export function NotificationProvider({ children }) {
 
   // Connect WebSocket for barbers
   useEffect(() => {
-    if (user?.role === 'barber') {
+    if (user?.role === 'BARBER') {
       wsService.connect(user.id, (notification) => {
         addNotification(notification)
         showToast(

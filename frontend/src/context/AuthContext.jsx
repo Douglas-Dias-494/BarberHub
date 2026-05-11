@@ -18,19 +18,19 @@ export function AuthProvider({ children }) {
   }, [])
 
   const login = useCallback(async (email, password) => {
-    const data = await authService.login(email, password)
+    const data = await authService.login({email, password})
     storage.setToken(data.token)
-    storage.setUser(data.user)
-    setUser(data.user)
-    return data.user
+    storage.setUser(data)
+    setUser(data)
+    return data
   }, [])
 
   const register = useCallback(async (userData) => {
     const data = await authService.register(userData)
     storage.setToken(data.token)
-    storage.setUser(data.user)
-    setUser(data.user)
-    return data.user
+    storage.setUser(data)
+    setUser(data)
+    return data
   }, [])
 
   const logout = useCallback(() => {

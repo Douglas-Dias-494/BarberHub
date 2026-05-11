@@ -41,7 +41,7 @@ export default function Navbar({ variant = 'client' }) {
     { to: '/barber/schedules', label: 'Horários' },
   ]
 
-  const links = variant === 'barber' ? barberLinks : clientLinks
+  const links = variant === 'BARBER' ? barberLinks : clientLinks
 
   return (
     <>
@@ -60,7 +60,7 @@ export default function Navbar({ variant = 'client' }) {
           gap: 32
         }}>
           {/* Logo */}
-          <Link to={variant === 'barber' ? '/barber/dashboard' : '/'} style={{
+          <Link to={variant === 'BARBER' ? '/barber/dashboard' : '/'} style={{
             fontFamily: 'var(--font-display)',
             fontSize: 22,
             fontWeight: 700,
@@ -189,7 +189,7 @@ export default function Navbar({ variant = 'client' }) {
                   <div style={{ padding: '8px 12px', borderBottom: '1px solid var(--border)', marginBottom: 8 }}>
                     <div style={{ fontSize: 13, fontWeight: 600 }}>{user?.name}</div>
                     <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
-                      {user?.role === 'barber' ? '✂ Barbeiro' : '👤 Cliente'}
+                      {user?.role === 'BARBER' ? '✂ Barbeiro' : '👤 Cliente'}
                     </div>
                   </div>
                   <button

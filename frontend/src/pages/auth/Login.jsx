@@ -6,7 +6,7 @@ import { useAuth } from '../../hooks/useAuth'
 export default function Login() {
 
   const navigate = useNavigate()
-  const { setUser } = useAuth()
+  const { login } = useAuth()
 
   const [form, setForm] = useState({
     email: '',
@@ -18,34 +18,32 @@ export default function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault()
+    
+try {
+    setLoading(true)
+    setError('')
 
-    try {
+    // 1. Use a função login do CONTEXTO (useAuth) 
+    // Passando os campos individualmente como sua AuthProvider espera
+    const user = await login(form.email, form.password)
 
-      setLoading(true)
-      setError('')
+    console.log('Login realizado com sucesso:', user)
+    console.log('Role do usuário:', user.role)
 
-      const response = await login(form)
-
-      localStorage.setItem('token', response.token)
-
-      setUser(response.user)
-
-      if (response.user.role === 'barber') {
-        navigate('/barber/dashboard')
-      } else {
-        navigate('/')
-      }
-
-    } catch (err) {
-
-      setError('Email ou senha inválidos.')
-
-    } finally {
-
-      setLoading(false)
-
+    // 2. Redirecionamento inteligente baseado na role
+    if (user.role === 'BARBER') {
+      navigate('/barber/dashboard')
+    } else {
+      navigate('/')
     }
+
+  } catch (err) {
+    console.error('Erro no login:', err)
+    setError('Email ou senha inválidos.')
+  } finally {
+    setLoading(false)
   }
+}
 
   return (
     <div style={{

@@ -1,6 +1,9 @@
 package com.douglas.backend.auth;
 
+import com.douglas.backend.auth.dto.LoginRequestDTO;
+import com.douglas.backend.auth.dto.LoginResponseDTO;
 import com.douglas.backend.auth.dto.RegisterRequestDTO;
+import com.douglas.backend.auth.dto.RegisterResponseDTO;
 import com.douglas.backend.auth.jwt.JwtService;
 import com.douglas.backend.user.UserEntity;
 import com.douglas.backend.user.UserRepository;
@@ -16,7 +19,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public String register(RegisterRequestDTO dto) {
+    public RegisterResponseDTO register(RegisterRequestDTO dto) {
 
         UserEntity user = UserEntity.builder()
                 .name(dto.getName())
@@ -26,7 +29,37 @@ public class AuthService {
                 .build();
 
         repository.save(user);
+       String token = jwtService.generateToken(user.getEmail());
 
-        return jwtService.generateToken(user.getEmail());
+        return new RegisterResponseDTO(
+                user.getName(),
+                user.getEmail(),
+                user.getRole(),
+                token
+        );
+    }
+
+    public LoginResponseDTO login(LoginRequestDTO dto) {
+
+        UserEntity user = repository.findByEmail(dto.getEmail())
+                        .orElseThrow(() -> new RuntimeException("User Not Found"));
+
+        boolean passwordMatches = passwordEncoder.matches(
+                dto.getPassword(),
+                user.getPassword()
+        );
+
+        if (!passwordMatches) {
+            throw new RuntimeException("Invalid password...");
+        }
+
+       String token = jwtService.generateToken(user.getEmail());
+
+        return new LoginResponseDTO(
+                user.getEmail(),
+                token,
+                user.getName(),
+                user.getRole()
+        );
     }
 }
