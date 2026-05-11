@@ -1,5 +1,7 @@
 package com.douglas.backend.barber;
 
+import com.douglas.backend.barber.dto.BarberShopRequestDTO;
+import com.douglas.backend.barber.dto.BarberShopResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,15 +12,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BarberShopController {
 
-    private final BarberShopRepository repository;
+    private final BarberShopService barberShopService;
 
-    @GetMapping
-    public List<BarberShopEntity> findAll() {
-        return repository.findAll();
-    }
+//    @GetMapping
+//    public List<BarberShopResponseDTO> findAll() {
+//        return
+//    }
 
     @PostMapping
-    public BarberShopEntity create(@RequestBody BarberShopEntity barberShop) {
-        return repository.save(barberShop);
+    public BarberShopResponseDTO create(@RequestBody BarberShopRequestDTO barberShop) {
+        return barberShopService.createMyBarberShop(barberShop);
     }
 }
