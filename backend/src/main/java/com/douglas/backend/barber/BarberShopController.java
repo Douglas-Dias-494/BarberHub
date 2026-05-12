@@ -3,6 +3,7 @@ package com.douglas.backend.barber;
 import com.douglas.backend.barber.dto.BarberShopRequestDTO;
 import com.douglas.backend.barber.dto.BarberShopResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ public class BarberShopController {
 //    }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public BarberShopResponseDTO create(@RequestBody BarberShopRequestDTO barberShop) {
         return barberShopService.createMyBarberShop(barberShop);
     }
@@ -28,5 +30,16 @@ public class BarberShopController {
     @GetMapping("/mine")
     public ResponseEntity<BarberShopResponseDTO> getMyShop() {
         return ResponseEntity.ok(barberShopService.getMyShop());
+    }
+
+    @PutMapping("/{id}")
+    public BarberShopResponseDTO update(@PathVariable Long id, @RequestBody BarberShopRequestDTO barberShop) {
+        return barberShopService.updateMyShop(id, barberShop);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        barberShopService.deleteMyShop(id);
     }
 }

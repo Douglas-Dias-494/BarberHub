@@ -5,8 +5,10 @@ import com.douglas.backend.barber.dto.BarberShopResponseDTO;
 import com.douglas.backend.user.UserEntity;
 import com.douglas.backend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +71,41 @@ public class BarberShopService {
                 shop.getLatitude(),
                 shop.getLongitude()
         );
+    }
+
+    public BarberShopResponseDTO updateMyShop(Long id, BarberShopRequestDTO barberShop) {
+        BarberShopEntity barberShopEntity = barberShopRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Barbershop not found"));
+
+        barberShopEntity.setName(barberShop.getName());
+        barberShopEntity.setAddress(barberShop.getAddress());
+        barberShopEntity.setPhone(barberShop.getPhone());
+        barberShopEntity.setOpenDays(barberShop.getOpenDays());
+        barberShopEntity.setOpenHour(barberShop.getOpenHour());
+        barberShopEntity.setCloseHour(barberShop.getCloseHour());
+        barberShopEntity.setLatitude(barberShop.getLatitude());
+        barberShopEntity.setLongitude(barberShop.getLongitude());
+
+        BarberShopEntity updatedBarberShop = barberShopRepository.save(barberShopEntity);
+
+        return new BarberShopResponseDTO(
+                updatedBarberShop.getId(),
+                updatedBarberShop.getName(),
+                updatedBarberShop.getAddress(),
+                updatedBarberShop.getPhone(),
+                updatedBarberShop.getOpenDays(),
+                updatedBarberShop.getOpenHour(),
+                updatedBarberShop.getCloseHour(),
+                updatedBarberShop.getLatitude(),
+                updatedBarberShop.getLongitude()
+        );
+    }
+
+    public void deleteMyShop(Long id) {
+        BarberShopEntity barberShopEntity = barberShopRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "BarberShop not found"));
+
+        barberShopRepository.delete(barberShopEntity);
     }
 
 }
