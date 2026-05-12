@@ -1,30 +1,44 @@
-import BarberLayout from '../../layouts/BarberLayout'
-import { barberShopService } from '../../services/barberShopService';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from "react"
+import { barberShopService } from "../../services/barberShopService"
 
 export default function MyShop() {
 
-    const [shop, setShop] = useState(null);
+  const [shop, setShop] = useState(null)
 
-      useEffect(() => {
-        async function loadShop() {
-          const data = await barberShopService.getMyShop();
-          setShop(data);
-        }
-        loadShop();
-      }, []);
+  useEffect(() => {
 
-      if (!shop) return <BarberLayout><p>Carregando...</p></BarberLayout>;
+    async function loadShop() {
 
+      try {
 
+        const data = await barberShopService.getMyShop()
+
+        console.log(data)
+
+        setShop(data)
+
+      } catch (error) {
+
+        console.error(error)
+
+      }
+    }
+
+    loadShop()
+
+  }, [])
+
+  console.log('SHOP LAYOUT RENDER')
+
+  if (!shop) {
+    return <h1>Carregando...</h1>
+  }
 
   return (
-    <BarberLayout>
 
-      <div className="container">
+    <div className="container">
 
-        <div className="page-header fade-in">
+      <div className="page-header fade-in">
 
           <div className="gold-line" />
 
@@ -68,7 +82,7 @@ export default function MyShop() {
 
               <input
                 className="form-control"
-                defaultValue="BarberHub Premium"
+                defaultValue={shop.name}
               />
             </div>
 
@@ -79,7 +93,7 @@ export default function MyShop() {
 
               <input
                 className="form-control"
-                defaultValue="(11) 99999-9999"
+                defaultValue={shop.phone}
               />
             </div>
 
@@ -93,7 +107,7 @@ export default function MyShop() {
 
             <input
               className="form-control"
-              defaultValue="Alameda Rio Negro, Barueri"
+              defaultValue={shop.address}
             />
 
           </div>
@@ -126,8 +140,6 @@ export default function MyShop() {
 
         </div>
 
-      </div>
-
-    </BarberLayout>
+    </div>
   )
 }
