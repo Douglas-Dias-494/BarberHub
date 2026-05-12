@@ -8,7 +8,7 @@ export default function ClientLayout({ children }) {
       background: 'var(--bg-primary)'
     }}>
 
-      <Navbar variant="client" />
+      <Navbar variant="CLIENT" />
 
       <main style={{
         paddingTop: 32,

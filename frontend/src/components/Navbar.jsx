@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useNotification } from '../hooks/useNotification'
 import NotificationPopup from './NotificationPopup'
 
-export default function Navbar({ variant = 'client' }) {
+export default function Navbar({ variant = 'CLIENT' }) {
   const { user, logout } = useAuth()
   const { unreadCount } = useNotification()
   const navigate = useNavigate()

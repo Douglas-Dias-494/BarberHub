@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class BarberShopService {
 
     private final BarberShopRepository barberShopRepository;
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public BarberShopResponseDTO createMyBarberShop(BarberShopRequestDTO dto) {
 
@@ -37,6 +37,7 @@ public class BarberShopService {
         BarberShopEntity savedBarberShop = barberShopRepository.save(barberShop);
 
         return new BarberShopResponseDTO(
+                savedBarberShop.getId(),
                 savedBarberShop.getName(),
                 savedBarberShop.getAddress(),
                 savedBarberShop.getPhone(),
@@ -45,6 +46,28 @@ public class BarberShopService {
                 savedBarberShop.getCloseHour(),
                 savedBarberShop.getLatitude(),
                 savedBarberShop.getLongitude()
+        );
+    }
+
+    public BarberShopResponseDTO getMyShop() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        UserEntity owner = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        BarberShopEntity shop = barberShopRepository.findByOwnerId(owner.getId())
+                .orElseThrow(() -> new RuntimeException("Shop not found"));
+
+        return new BarberShopResponseDTO(
+                shop.getId(),
+                shop.getName(),
+                shop.getAddress(),
+                shop.getPhone(),
+                shop.getOpenDays(),
+                shop.getOpenHour(),
+                shop.getCloseHour(),
+                shop.getLatitude(),
+                shop.getLongitude()
         );
     }
 

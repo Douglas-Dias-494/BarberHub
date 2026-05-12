@@ -1,6 +1,23 @@
 import BarberLayout from '../../layouts/BarberLayout'
+import { barberShopService } from '../../services/barberShopService';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 export default function MyShop() {
+
+    const [shop, setShop] = useState(null);
+
+      useEffect(() => {
+        async function loadShop() {
+          const data = await barberShopService.getMyShop();
+          setShop(data);
+        }
+        loadShop();
+      }, []);
+
+      if (!shop) return <BarberLayout><p>Carregando...</p></BarberLayout>;
+
+
 
   return (
     <BarberLayout>
