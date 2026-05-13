@@ -52,7 +52,6 @@ export default function Appointments() {
 
   return (
     <>
-      <Navbar variant="BARBER" />
 
       <div className="container" style={{ paddingTop: 40, paddingBottom: 40 }}>
 

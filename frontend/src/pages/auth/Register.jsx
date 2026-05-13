@@ -208,21 +208,21 @@ export default function Register() {
                   onClick={() =>
                     setForm({
                       ...form,
-                      role: 'client'
+                      role: 'CLIENT'
                     })
                   }
                   style={{
                     padding: 20,
                     borderRadius: 'var(--radius-md)',
-                    border: form.role === 'client'
+                    border: form.role === 'CLIENT'
                       ? '1px solid var(--gold)'
                       : '1px solid var(--border)',
 
-                    background: form.role === 'client'
+                    background: form.role === 'CLIENT'
                       ? 'var(--gold-dim)'
                       : 'var(--bg-card)',
 
-                    color: form.role === 'client'
+                    color: form.role === 'CLIENT'
                       ? 'var(--gold)'
                       : 'var(--text-primary)',
 

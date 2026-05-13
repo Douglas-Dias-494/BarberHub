@@ -48,7 +48,6 @@ export default function CreateService() {
   }
 
   return (
-    <BarberLayout>
 
       <div className="container">
 
@@ -210,7 +209,5 @@ export default function CreateService() {
         </div>
 
       </div>
-
-    </BarberLayout>
   )
 }

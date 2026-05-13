@@ -22,7 +22,6 @@ export default function ManageSchedules() {
   ]
 
   return (
-    <BarberLayout>
 
       <div className="container">
 
@@ -163,7 +162,5 @@ export default function ManageSchedules() {
         </div>
 
       </div>
-
-    </BarberLayout>
   )
 }

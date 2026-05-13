@@ -10,5 +10,5 @@ spring:
     show-sql: true
 
 jwt:
-  secret: barberhub-secret-key-super-safe
+  secret: minha-chave-super-secreta-com-mais-de-32-caracteres-123456barberhub-secret-key-super-safe
   expiration: 86400000

@@ -33,6 +33,11 @@ export const barberShopService = {
     return data
   },
 
+  async delete(id) {
+    const { data } = await api.delete(`/barbershops/delete/${id}`)
+    return data
+  },
+
   // Services
   async getServices(shopId) {
     const { data } = await api.get(`/barbershops/${shopId}/services`)
