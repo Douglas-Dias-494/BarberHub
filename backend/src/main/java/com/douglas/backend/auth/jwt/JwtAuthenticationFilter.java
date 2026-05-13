@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final String SECRET = "minha-chave-super-secreta-com-mais-de-32-caracteres-123456barberhub-secret-key-super-safe";
+    private final JwtService jwtService;
     private final UserRepository userRepository;
 
     @Override
@@ -32,25 +32,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
+        final String token = authHeader.substring(7);
 
-            try {
-                Claims claims = Jwts.parserBuilder()
-                        .setSigningKey(Keys.hmacShaKeyFor(SECRET.getBytes()))
-                        .build()
-                        .parseClaimsJws(token)
-                        .getBody();
+        try {
+            final String email = jwtService.extractEmail(token);
 
-                String email = claims.getSubject();
-
-                if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-                    userRepository.findByEmail(email).ifPresent(user -> {
-
+            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                userRepository.findByEmail(email).ifPresent(user -> {
+                    if (jwtService.isTokenValid(token, user.getEmail())) {
                         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().name());
-
                         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                                 user.getEmail(),
                                 null,
@@ -58,13 +53,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         );
 
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                         SecurityContextHolder.getContext().setAuthentication(authentication);
-                    });
-                }
-            } catch (Exception e) {
-                SecurityContextHolder.clearContext();
+                    }
+                });
             }
+        } catch (Exception e) {
+            SecurityContextHolder.clearContext();
         }
         filterChain.doFilter(request, response);
     }
