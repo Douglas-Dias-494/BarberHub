@@ -21,6 +21,9 @@ public class BarberServiceEntity {
 
     private Integer duration;
 
+    private String description;
+
     @ManyToOne
+    @JoinColumn(name = "barbershop_id", nullable = false)
     private BarberShopEntity barberShopEntity;
 }

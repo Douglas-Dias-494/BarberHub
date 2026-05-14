@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/auth/register").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/barbershops/**").hasAuthority("BARBER")
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/barbershops/**", "/services/**").hasAuthority("BARBER")
 
                         .anyRequest().authenticated()
                 )
