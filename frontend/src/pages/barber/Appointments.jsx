@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import Navbar from '../../components/Navbar'
 import api from '../../services/api'
+import { barberShopService } from '../../services/barberShopService'
 
 export default function Appointments() {
 
   const [appointments, setAppointments] = useState([])
+  const [shop, setShop] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -13,7 +14,15 @@ export default function Appointments() {
 
       try {
 
-        const response = await api.get('/appointments')
+        // Busca a barbearia do barbeiro logado
+        const myShop = await barberShopService.getMyShop()
+
+        setShop(myShop)
+
+        // Busca os agendamentos da loja
+        const response = await api.get(
+          `/appointments/${myShop.id}`
+        )
 
         setAppointments(response.data)
 
@@ -39,7 +48,7 @@ export default function Appointments() {
       case 'CONFIRMED':
         return 'badge-success'
 
-      case 'CANCELED':
+      case 'CANCELLED':
         return 'badge-error'
 
       case 'PENDING':
@@ -169,13 +178,6 @@ export default function Appointments() {
                       {appointment.clientName}
                     </h2>
 
-                    <p style={{
-                      color: 'var(--text-secondary)',
-                      fontSize: 14
-                    }}>
-                      {appointment.clientEmail}
-                    </p>
-
                   </div>
 
                   <span className={`badge ${getStatusBadge(appointment.status)}`}>
@@ -216,7 +218,7 @@ export default function Appointments() {
                     </span>
 
                     <span>
-                      {appointment.date}
+                      {appointment.appointmentDate}
                     </span>
                   </div>
 
@@ -229,7 +231,7 @@ export default function Appointments() {
                     </span>
 
                     <span>
-                      {appointment.hour}
+                      {appointment.appointmentHour}
                     </span>
                   </div>
 
@@ -245,9 +247,27 @@ export default function Appointments() {
                       color: 'var(--gold)',
                       fontWeight: 700
                     }}>
-                      R$ {appointment.price}
+                      R$ {appointment.totalPrice}
                     </span>
                   </div>
+
+                  {appointment.notes && (
+
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 6
+                    }}>
+                      <span style={{ color: 'var(--text-muted)' }}>
+                        Observações
+                      </span>
+
+                      <p>
+                        {appointment.notes}
+                      </p>
+                    </div>
+
+                  )}
 
                 </div>
 

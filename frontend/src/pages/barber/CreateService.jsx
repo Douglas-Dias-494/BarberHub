@@ -146,18 +146,6 @@ export default function CreateService() {
               />
             </div>
 
-            {/* Description */}
-            <div className="form-group">
-              <label className="form-label">Descrição</label>
-              <textarea
-                className="form-control"
-                rows={4}
-                placeholder="Descreva o serviço..."
-                value={form.description || ''}
-                onChange={e => setForm({ ...form, description: e.target.value })}
-              />
-            </div>
-
             {/* Grid Preço e Duração */}
             <div className="grid-2">
               {/* Price */}

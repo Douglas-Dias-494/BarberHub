@@ -4,7 +4,6 @@ import { useAuth } from '../hooks/useAuth'
 import Login from '../pages/auth/Login'
 import Register from '../pages/auth/Register'
 import NotFound from '../pages/NotFound'
-
 import ClientLayout from '../layouts/ClientLayout'
 import BarberLayout from '../layouts/BarberLayout'
 
@@ -16,7 +15,6 @@ import MyAppointments from '../pages/client/MyAppointments'
 import Dashboard from '../pages/barber/Dashboard'
 import MyShop from '../pages/barber/MyShop'
 import CreateService from '../pages/barber/CreateService'
-import ManageSchedules from '../pages/barber/ManageSchedules'
 import Appointments from '../pages/barber/Appointments'
 
 import PrivateRoute from './PrivateRoute'
@@ -50,7 +48,6 @@ export default function AppRoutes() {
           <Route path="/barber/dashboard" element={<Dashboard />} />
           <Route path="/barber/shop" element={<MyShop />} />
           <Route path="/barber/services" element={<CreateService />} />
-          <Route path="/barber/schedules" element={<ManageSchedules />} />
           <Route path="/barber/appointments" element={<Appointments />} />
         </Route>
       </Route>

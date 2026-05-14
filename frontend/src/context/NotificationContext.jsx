@@ -12,11 +12,16 @@ export function NotificationProvider({ children }) {
 
   // Connect WebSocket for barbers
   useEffect(() => {
+
+  console.log('USER DO CONTEXT')
+  console.log(user)
+
+
     if (user?.role === 'BARBER') {
       wsService.connect(user.id, (notification) => {
         addNotification(notification)
         showToast(
-          `📅 Novo agendamento de ${notification.client_name}`,
+          `📅 Novo agendamento de ${notification.clientName}`,
           'info',
           6000
         )

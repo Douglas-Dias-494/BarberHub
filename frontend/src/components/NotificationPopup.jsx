@@ -127,15 +127,15 @@ export default function NotificationPopup({ onClose }) {
                       )}
                     </div>
                     <div style={{ fontSize: 13, color: 'var(--text-secondary)', lineHeight: 1.8 }}>
-                      <div><strong style={{ color: 'var(--text-primary)' }}>Cliente:</strong> {n.client_name}</div>
-                      <div><strong style={{ color: 'var(--text-primary)' }}>Serviço:</strong> {n.service_name}</div>
-                      <div><strong style={{ color: 'var(--text-primary)' }}>Horário:</strong> {n.time}</div>
+                      <div><strong style={{ color: 'var(--text-primary)' }}>Cliente:</strong> {n.client}</div>
+                      <div><strong style={{ color: 'var(--text-primary)' }}>Serviço:</strong> {n.service}</div>
+                      <div><strong style={{ color: 'var(--text-primary)' }}>Horário:</strong> {n.hour}</div>
                       <div><strong style={{ color: 'var(--text-primary)' }}>Valor:</strong> {formatCurrency(n.price)}</div>
                     </div>
                   </div>
                 </div>
                 <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 6 }}>
-                  {n.created_at ? format(new Date(n.created_at), "dd/MM 'às' HH:mm", { locale: ptBR }) : 'agora'}
+                  {n.appointmentDate ? format(new Date(n.appointmentDate), "dd/MM 'às' HH:mm", { locale: ptBR }) : 'agora'}
                 </div>
               </div>
             ))

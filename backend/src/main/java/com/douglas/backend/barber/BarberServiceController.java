@@ -36,7 +36,4 @@ public class BarberServiceController {
     public void deleteService(@PathVariable Long shopId, @PathVariable Long id) {
         barberServiceService.deleteService(shopId, id);
     }
-
-
-
 }

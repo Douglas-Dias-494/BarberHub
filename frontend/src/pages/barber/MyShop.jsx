@@ -54,7 +54,7 @@ export default function MyShop() {
 
     try {
 
-      await barberShopService.update(shop.Id, shop)
+      await barberShopService.update(shop.id, shop)
 
       setEditing(false)
 

@@ -1,71 +1,64 @@
+import { Client } from '@stomp/stompjs'
+
 class WebSocketService {
+
   constructor() {
-    this.ws = null
-    this.reconnectTimeout = null
-    this.onMessage = null
+    this.client = null
   }
 
   connect(userId, onMessage) {
-    this.onMessage = onMessage
-    this._connect(userId)
-  }
 
-  _connect(userId) {
-    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
-    const host = window.location.host
-    const url = `${protocol}://${host}/ws?userId=${userId}`
+    this.client = new Client({
 
-    try {
-      this.ws = new WebSocket(url)
+      brokerURL: 'ws://localhost:8080/ws',
 
-      this.ws.onopen = () => {
-        console.log('[WS] Connected')
-        if (this.reconnectTimeout) {
-          clearTimeout(this.reconnectTimeout)
-          this.reconnectTimeout = null
-        }
+      reconnectDelay: 5000,
+
+      debug: (str) => {
+        console.log('[STOMP]', str)
+      },
+
+      onConnect: () => {
+
+        console.log('[WS] CONNECTED')
+
+    this.client.subscribe(
+      `/topic/barber/${userId}`,
+      (message) => {
+
+        console.log('[WS] MESSAGE')
+        console.log(message.body)
+
+        const data = JSON.parse(message.body)
+
+        console.log('[WS] PARSED')
+        console.log(data)
+
+        onMessage(data)
       }
+    )
+      },
 
-      this.ws.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data)
-          if (data.type === 'new_appointment' && this.onMessage) {
-            this.onMessage(data.payload)
-          }
-        } catch (e) {
-          console.error('[WS] Parse error', e)
-        }
-      }
+      onStompError: (frame) => {
 
-      this.ws.onclose = () => {
-        console.log('[WS] Disconnected, reconnecting in 5s...')
-        this.reconnectTimeout = setTimeout(() => this._connect(userId), 5000)
-      }
+        console.error('[STOMP ERROR]')
+        console.error(frame)
+      },
 
-      this.ws.onerror = (err) => {
-        console.error('[WS] Error', err)
-        this.ws.close()
+      onWebSocketError: (error) => {
+
+        console.error('[WS ERROR]')
+        console.error(error)
       }
-    } catch (e) {
-      console.error('[WS] Failed to connect', e)
-    }
+    })
+
+    this.client.activate()
   }
 
   disconnect() {
-    if (this.reconnectTimeout) {
-      clearTimeout(this.reconnectTimeout)
-      this.reconnectTimeout = null
-    }
-    if (this.ws) {
-      this.ws.onclose = null
-      this.ws.close()
-      this.ws = null
-    }
-  }
 
-  send(data) {
-    if (this.ws?.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify(data))
+    if (this.client) {
+      this.client.deactivate()
     }
   }
 }
