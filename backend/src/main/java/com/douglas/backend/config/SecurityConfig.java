@@ -41,8 +41,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/auth/register").permitAll()
-                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/barbershops/**").hasAuthority("BARBER")
-
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/barbershops/**", "/services/**").hasAuthority("BARBER")
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/appointments/**").hasAnyAuthority("CLIENT", "BARBER")
+                        .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

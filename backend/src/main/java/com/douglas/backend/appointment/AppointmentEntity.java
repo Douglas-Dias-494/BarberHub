@@ -2,6 +2,7 @@ package com.douglas.backend.appointment;
 
 import com.douglas.backend.barber.BarberServiceEntity;
 import com.douglas.backend.barber.BarberShopEntity;
+import com.douglas.backend.enums.AppointmentStatus;
 import com.douglas.backend.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -34,4 +35,9 @@ public class AppointmentEntity {
     private LocalTime appointmentHour;
 
     private Double totalPrice;
+
+    private String notes;
+
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status;
 }

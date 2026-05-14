@@ -40,22 +40,22 @@ export const barberShopService = {
 
   // Services
   async getServices(shopId) {
-    const { data } = await api.get(`/barbershops/${shopId}/services`)
+    const { data } = await api.get(`/services/${shopId}`)
     return data
   },
 
   async createService(shopId, serviceData) {
-    const { data } = await api.post(`/barbershops/${shopId}/services`, serviceData)
+    const { data } = await api.post(`/services/${shopId}`, serviceData)
     return data
   },
 
   async updateService(shopId, serviceId, serviceData) {
-    const { data } = await api.put(`/barbershops/${shopId}/services/${serviceId}`, serviceData)
+    const { data } = await api.put(`/services/${shopId}/${serviceId}`, serviceData)
     return data
   },
 
   async deleteService(shopId, serviceId) {
-    const { data } = await api.delete(`/barbershops/${shopId}/services/${serviceId}`)
+    const { data } = await api.delete(`/services/${shopId}/${serviceId}`)
     return data
   },
 

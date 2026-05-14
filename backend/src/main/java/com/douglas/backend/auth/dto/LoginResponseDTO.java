@@ -1,5 +1,5 @@
 package com.douglas.backend.auth.dto;
-import com.douglas.backend.roles.UserRoles;
+import com.douglas.backend.enums.UserRoles;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginResponseDTO {
+    Long id;
     private String email;
     private String token;
     private String name;

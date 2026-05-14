@@ -37,8 +37,7 @@ export default function Navbar({ variant = 'CLIENT' }) {
     { to: '/barber/dashboard', label: 'Dashboard' },
     { to: '/barber/appointments', label: 'Agenda' },
     { to: '/barber/shop', label: 'Minha Loja' },
-    { to: '/barber/services', label: 'Serviços' },
-    { to: '/barber/schedules', label: 'Horários' },
+    { to: '/barber/services', label: 'Serviços' }
   ]
 
   const links = variant === 'BARBER' ? barberLinks : clientLinks

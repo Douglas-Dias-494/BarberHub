@@ -1,6 +1,6 @@
 package com.douglas.backend.user;
 
-import com.douglas.backend.roles.UserRoles;
+import com.douglas.backend.enums.UserRoles;
 import jakarta.persistence.*;
 import lombok.*;
 

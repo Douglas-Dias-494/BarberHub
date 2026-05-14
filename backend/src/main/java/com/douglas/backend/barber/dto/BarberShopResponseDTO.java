@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BarberShopResponseDTO {
-    private Long Id;
+    private Long id;
     private String name;
     private String address;
     private String phone;
