@@ -3,6 +3,8 @@ import BarberCard from '../../components/BarberCard'
 
 export default function Home() {
 
+  console.log("VOCÊ ESTÁ NA HOME");
+
   const shops = [
     {
       id: 1,
@@ -25,7 +27,6 @@ export default function Home() {
   ]
 
   return (
-    <ClientLayout>
 
       <div className="container">
 
@@ -74,7 +75,5 @@ export default function Home() {
         </div>
 
       </div>
-
-    </ClientLayout>
   )
 }
