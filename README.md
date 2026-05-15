@@ -64,5 +64,5 @@ A infraestrutura utiliza a abstração `PasswordEncoder` acoplada ao algoritmo *
 
 ### 1. Clonar o repositório
 ```bash
-git clone [https://github.com/seu-usuario/barberhub.git](https://github.com/seu-usuario/barberhub.git)
+git clone git@github.com:Douglas-Dias-494/BarberHub.git
 cd barberhub
