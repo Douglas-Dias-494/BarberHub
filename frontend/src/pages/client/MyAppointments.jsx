@@ -2,6 +2,9 @@ import ClientLayout from '../../layouts/ClientLayout'
 
 export default function MyAppointments() {
 
+  console.log("VOCÊ ESTÁ AQUI");
+  
+
   const appointments = [
     {
       id: 1,
@@ -22,7 +25,6 @@ export default function MyAppointments() {
   ]
 
   return (
-    <ClientLayout>
 
       <div className="container">
 
@@ -146,7 +148,5 @@ export default function MyAppointments() {
         </div>
 
       </div>
-
-    </ClientLayout>
   )
 }

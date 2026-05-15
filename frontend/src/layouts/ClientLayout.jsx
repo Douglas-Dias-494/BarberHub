@@ -1,22 +1,17 @@
-import Navbar from '../components/Navbar'
+import { Outlet } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
-export default function ClientLayout({ children }) {
-
+export default function BarberLayout() {
+    
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'var(--bg-primary)'
-    }}>
 
-      <Navbar variant="CLIENT" />
+    <div style={{ minHeight: '100vh', background: 'var(--bg-primary)' }}>
+      {/* O Navbar fica APENAS aqui */}
+      <Navbar variant="CLIENT" /> 
 
-      <main style={{
-        paddingTop: 32,
-        paddingBottom: 48
-      }}>
-        {children}
+      <main style={{ paddingTop: 32, paddingBottom: 48 }}>
+        <Outlet /> 
       </main>
-
     </div>
-  )
+  );
 }

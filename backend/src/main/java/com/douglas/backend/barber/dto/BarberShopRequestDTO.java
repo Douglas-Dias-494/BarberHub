@@ -16,7 +16,5 @@ public class BarberShopRequestDTO {
     private String openDays;
     private String openHour;
     private String closeHour;
-    private Double latitude;
-    private Double longitude;
 
 }

@@ -21,7 +21,6 @@ export default function BarberDetails() {
   ]
 
   return (
-    <ClientLayout>
 
       <div className="container">
 
@@ -83,7 +82,5 @@ export default function BarberDetails() {
         </div>
 
       </div>
-
-    </ClientLayout>
   )
 }

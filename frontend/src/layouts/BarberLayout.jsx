@@ -2,9 +2,7 @@ import { Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 export default function BarberLayout() {
-  
-  console.log('BARBER LAYOUT RENDER')
-  
+    
   return (
 
     <div style={{ minHeight: '100vh', background: 'var(--bg-primary)' }}>

@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom'
 
 export default function BarberCard({ shop }) {
-
-  console.log("Propriedades recebidas no Card de:", shop.name, shop);
   
   return (
     <div

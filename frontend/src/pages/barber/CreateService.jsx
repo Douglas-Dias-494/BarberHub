@@ -48,7 +48,7 @@ export default function CreateService() {
 
   // Função auxiliar para atualizar a listagem após mutações
   async function fetchServices() {
-    console.log('[DEBUG FETCH] fetchServices disparado. Estado atual do shopId:', shopId)
+
     if (!shopId) {
       console.warn('[DEBUG FETCH - ABORTADO] Busca cancelada porque shopId é null ou undefined')
       return
@@ -56,7 +56,6 @@ export default function CreateService() {
     try {
       const servicesData = await barberShopService.getServices(shopId)
       const listaServicos = servicesData?.content || servicesData || []
-      console.log('[DEBUG FETCH - SUCESSO] Novos serviços carregados:', listaServicos)
       setServices(listaServicos)
     } catch (err) {
       console.error('[DEBUG FETCH - ERRO] Erro ao atualizar lista de serviços:', err)
