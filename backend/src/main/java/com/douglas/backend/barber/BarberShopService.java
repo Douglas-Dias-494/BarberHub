@@ -35,8 +35,6 @@ public class BarberShopService {
             LocalTime opening = LocalTime.parse(open);
             LocalTime closing = LocalTime.parse(close);
 
-            System.out.println("DEBUG Horário calculado: " + now);
-
             return !now.isBefore(opening) && !now.isAfter(closing);
         } catch (Exception e) {
             return false;
@@ -83,13 +81,22 @@ public class BarberShopService {
                 .orElse(null);
     }
 
+    public BarberShopResponseDTO findById(Long id, Double userLat, Double userLon) {
+
+        BarberShopEntity entity = barberShopRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Store not found"));
+
+        return toDTO(entity, userLat, userLon);
+    }
+
+
     public List<BarberShopResponseDTO> findAllAndSortByDistance(Double userLat, Double userLon) {
         List<BarberShopEntity> shops = barberShopRepository.findAll();
 
         return shops.stream()
-                // Aqui passamos a entidade e as coordenadas do usuário para o toDTO
+
                 .map(shop -> toDTO(shop, userLat, userLon))
-                // Ordenamos usando o campo distance que o toDTO já calculou
+
                 .sorted(Comparator.comparingDouble(dto ->
                         dto.getDistance() != null ? dto.getDistance() : Double.MAX_VALUE))
                 .toList();
@@ -105,7 +112,8 @@ public class BarberShopService {
                 Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
                         Math.sin(dLon / 2) * Math.sin(dLon / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return earthRadius * c;
+        double distance = earthRadius * c;
+        return Math.round(distance * 100.0) / 100.0;
     }
 
     public BarberShopResponseDTO updateMyShop(Long id, BarberShopRequestDTO barberShop) {

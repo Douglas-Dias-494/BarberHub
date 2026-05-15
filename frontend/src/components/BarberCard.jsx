@@ -96,7 +96,7 @@ export default function BarberCard({ shop }) {
             </span>
 
             <span style={{ color: 'var(--gold)' }}>
-              {shop.distance} km
+              {shop.distance ? `${shop.distance.toFixed(1)} KM` : "Distância desconhecida"}
             </span>
           </div>
 
@@ -109,7 +109,7 @@ export default function BarberCard({ shop }) {
         }}>
 
           <Link
-            to={`/barbershop/${shop.id}`}
+            to={`/barbershops/${shop.id}`}
             className="btn btn-primary"
             style={{ flex: 1 }}
           >
