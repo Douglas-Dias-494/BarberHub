@@ -15,7 +15,6 @@ public class AppointmentController {
 
     private final AppointmentService service;
 
-    // CLIENTE CRIA AGENDAMENTO
     @PostMapping
     public ResponseEntity<AppointmentResponseDTO> create(
             @RequestBody AppointmentRequestDTO appointment

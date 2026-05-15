@@ -98,7 +98,6 @@ export default function ScheduleAppointment() {
   }
 
   return (
-    <ClientLayout>
 
       <div className="container">
 
@@ -349,7 +348,5 @@ export default function ScheduleAppointment() {
         </div>
 
       </div>
-
-    </ClientLayout>
   )
 }

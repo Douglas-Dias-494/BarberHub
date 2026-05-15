@@ -2,6 +2,7 @@ package com.douglas.backend.barber;
 
 import com.douglas.backend.barber.dto.BarberShopRequestDTO;
 import com.douglas.backend.barber.dto.BarberShopResponseDTO;
+import com.douglas.backend.geocoding.GeocodingService;
 import com.douglas.backend.user.UserEntity;
 import com.douglas.backend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,8 @@ public class BarberShopService {
 
     private final BarberShopRepository barberShopRepository;
     private final UserRepository userRepository;
+    private final GeocodingService geocodingService;
+
 
     public BarberShopResponseDTO createMyBarberShop(BarberShopRequestDTO dto) {
 
@@ -24,6 +27,9 @@ public class BarberShopService {
         UserEntity owner = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found..."));
 
+        var coords = geocodingService.findCoordinates(dto.getAddress());
+        System.out.println("COORDENADAS ENCONTRADAS: " + coords);
+
         BarberShopEntity barberShop = BarberShopEntity.builder()
                 .name(dto.getName())
                 .address(dto.getAddress())
@@ -31,8 +37,8 @@ public class BarberShopService {
                 .openDays(dto.getOpenDays())
                 .openHour(dto.getOpenHour())
                 .closeHour(dto.getCloseHour())
-                .latitude(dto.getLatitude())
-                .longitude(dto.getLongitude())
+                .latitude(coords != null ? coords.lat() : null)
+                .longitude(coords != null ? coords.lng() : null)
                 .owner(owner)
                 .build();
 
@@ -52,30 +58,40 @@ public class BarberShopService {
     }
 
     public BarberShopResponseDTO getMyShop() {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
 
         UserEntity owner = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        BarberShopEntity shop = barberShopRepository.findByOwnerId(owner.getId())
-                .orElseThrow(() -> new RuntimeException("Shop not found"));
-
-        return new BarberShopResponseDTO(
-                shop.getId(),
-                shop.getName(),
-                shop.getAddress(),
-                shop.getPhone(),
-                shop.getOpenDays(),
-                shop.getOpenHour(),
-                shop.getCloseHour(),
-                shop.getLatitude(),
-                shop.getLongitude()
-        );
+        return barberShopRepository.findByOwnerId(owner.getId())
+                .map(shop -> new BarberShopResponseDTO(
+                        shop.getId(),
+                        shop.getName(),
+                        shop.getAddress(),
+                        shop.getPhone(),
+                        shop.getOpenDays(),
+                        shop.getOpenHour(),
+                        shop.getCloseHour(),
+                        shop.getLatitude(),
+                        shop.getLongitude()
+                ))
+                .orElse(null);
     }
 
     public BarberShopResponseDTO updateMyShop(Long id, BarberShopRequestDTO barberShop) {
         BarberShopEntity barberShopEntity = barberShopRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Barbershop not found"));
+
+        if (!barberShopEntity.getAddress().equalsIgnoreCase(barberShop.getAddress())) {
+            var coords = geocodingService.findCoordinates(barberShop.getAddress());
+            if (coords != null) {
+                barberShopEntity.setLatitude(coords.lat());
+                barberShopEntity.setLongitude(coords.lng());
+            }
+        }
 
         barberShopEntity.setName(barberShop.getName());
         barberShopEntity.setAddress(barberShop.getAddress());
@@ -83,8 +99,6 @@ public class BarberShopService {
         barberShopEntity.setOpenDays(barberShop.getOpenDays());
         barberShopEntity.setOpenHour(barberShop.getOpenHour());
         barberShopEntity.setCloseHour(barberShop.getCloseHour());
-        barberShopEntity.setLatitude(barberShop.getLatitude());
-        barberShopEntity.setLongitude(barberShop.getLongitude());
 
         BarberShopEntity updatedBarberShop = barberShopRepository.save(barberShopEntity);
 
