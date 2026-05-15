@@ -1,152 +1,128 @@
-import ClientLayout from '../../layouts/ClientLayout'
+import { useEffect, useState } from 'react';
+import {barberShopService} from '../../services/barberShopService';
+import ClientLayout from '../../layouts/ClientLayout';
 
 export default function MyAppointments() {
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  console.log("VOCÊ ESTÁ AQUI");
-  
-
-  const appointments = [
-    {
-      id: 1,
-      barber: 'BarberHub Premium',
-      service: 'Corte Degradê',
-      date: '08/05/2026',
-      hour: '14:30',
-      status: 'Confirmado'
-    },
-    {
-      id: 2,
-      barber: 'Elite Barber',
-      service: 'Barba',
-      date: '12/05/2026',
-      hour: '16:00',
-      status: 'Pendente'
+  useEffect(() => {
+    async function loadAppointments() {
+      try {
+        setLoading(true);
+        const data = await barberShopService.getMyAppointments();
+        setAppointments(data || []);
+      } catch (error) {
+        console.error("Erro ao carregar agendamentos:", error);
+      } finally {
+        setLoading(false);
+      }
     }
-  ]
+    loadAppointments();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="container">
+        <p className="page-subtitle">Carregando seus agendamentos...</p>
+      </div>
+    );
+  }
 
   return (
+    <div className="container">
+      <div className="page-header fade-in">
+        <div className="gold-line" />
+        <h1 className="page-title">Meus Agendamentos</h1>
+        <p className="page-subtitle">
+          {appointments.length > 0 
+            ? "Acompanhe seus horários marcados." 
+            : "Você ainda não possui agendamentos marcados."}
+        </p>
+      </div>
 
-      <div className="container">
-
-        <div className="page-header fade-in">
-
-          <div className="gold-line" />
-
-          <h1 className="page-title">
-            Meus Agendamentos
-          </h1>
-
-          <p className="page-subtitle">
-            Acompanhe seus horários marcados.
-          </p>
-
-        </div>
-
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 20
-        }}>
-
-          {appointments.map(item => (
-
-            <div
-              key={item.id}
-              className="card fade-in"
-            >
-
+      {appointments.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+          {appointments.map((item) => (
+            <div key={item.id} className="card fade-in">
               <div style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'flex-start',
                 marginBottom: 24
               }}>
-
                 <div>
-
                   <div className="gold-line" />
-
-                  <h2 style={{
-                    fontSize: 24,
-                    marginBottom: 6
-                  }}>
-                    {item.barber}
+                  <h2 style={{ fontSize: 24, marginBottom: 6 }}>
+                    {item.barberShopName
+}
                   </h2>
-
-                  <p style={{
-                    color: 'var(--text-secondary)'
-                  }}>
-                    {item.service}
+                  <p style={{ color: 'var(--text-secondary)' }}>
+                    {item.serviceName}
                   </p>
-
                 </div>
 
                 <span className={`badge ${
-                  item.status === 'Confirmado'
-                    ? 'badge-success'
-                    : 'badge-warning'
+                  item.status === 'CONFIRMED' ? 'badge-success' : 'badge-warning'
                 }`}>
                   {item.status}
                 </span>
-
               </div>
 
-              <div className="grid-2">
-
-                <div style={{
-                  padding: 18,
-                  borderRadius: 'var(--radius-md)',
-                  background: 'var(--bg-secondary)',
-                  border: '1px solid var(--border)'
-                }}>
-
-                  <div style={{
-                    color: 'var(--text-muted)',
-                    fontSize: 13,
-                    marginBottom: 6
-                  }}>
-                    Data
-                  </div>
-
-                  <div style={{
-                    fontWeight: 600
-                  }}>
-                    {item.date}
-                  </div>
-
+              {/* Grid ajustado para 3 colunas ou flex-wrap */}
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', 
+                gap: 15 
+              }}>
+                
+                {/* BLOCO: DATA */}
+                <div className="info-block">
+                  <div className="info-label">Data</div>
+                  <div className="info-value">{item.appointmentDate}</div>
                 </div>
 
-                <div style={{
-                  padding: 18,
-                  borderRadius: 'var(--radius-md)',
-                  background: 'var(--bg-secondary)',
-                  border: '1px solid var(--border)'
-                }}>
+                {/* BLOCO: HORÁRIO */}
+                <div className="info-block">
+                  <div className="info-label">Horário</div>
+                  <div className="info-value">{item.appointmentHour}</div>
+                </div>
 
-                  <div style={{
-                    color: 'var(--text-muted)',
-                    fontSize: 13,
-                    marginBottom: 6
-                  }}>
-                    Horário
+                {/* NOVO BLOCO: VALOR TOTAL */}
+                <div className="info-block" style={{ borderLeft: '2px solid var(--primary)' }}>
+                  <div className="info-label">Valor Total</div>
+                  <div className="info-value" style={{ color: 'var(--primary)' }}>
+                    {/* Formatação para moeda Real R$ */}
+                    {new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL'
+                    }).format(item.totalPrice || 0)}
                   </div>
-
-                  <div style={{
-                    fontWeight: 600
-                  }}>
-                    {item.hour}
-                  </div>
-
                 </div>
 
               </div>
-
             </div>
-
           ))}
-
         </div>
+      )}
 
-      </div>
-  )
+      {/* Estilização rápida para os blocos de informação interna */}
+      <style jsx>{`
+        .info-block {
+          padding: 18px;
+          border-radius: var(--radius-md);
+          background: var(--bg-secondary);
+          border: 1px solid var(--border);
+        }
+        .info-label {
+          color: var(--text-muted);
+          font-size: 13px;
+          margin-bottom: 6px;
+        }
+        .info-value {
+          font-weight: 600;
+        }
+      `}</style>
+    </div>
+  );
 }

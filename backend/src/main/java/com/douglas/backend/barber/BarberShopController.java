@@ -37,6 +37,15 @@ public class BarberShopController {
         return ResponseEntity.ok(shops);
     }
 
+    @GetMapping("/{id}")
+    public BarberShopResponseDTO getById(
+            @PathVariable Long id,
+            @RequestParam(required = false) Double lat,
+            @RequestParam(required = false) Double lon
+    ) {
+        return barberShopService.findById(id, lat, lon);
+    }
+
     @GetMapping("/mine")
     public ResponseEntity<BarberShopResponseDTO> getMyShop() {
         return ResponseEntity.ok(barberShopService.getMyShop());

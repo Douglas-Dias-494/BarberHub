@@ -71,12 +71,6 @@ public class AppointmentService {
         payload.put("price", saved.getTotalPrice());
         payload.put("status", saved.getStatus());
 
-        System.out.println("++=======================================++");
-        System.out.println("++=======================================++");
-        System.out.println("ENVIANDO NOTIFICAÇÃO...");
-        System.out.println(payload);
-        System.out.println("++=======================================++");
-        System.out.println("++=======================================++");
         messagingTemplate.convertAndSend(
                 "/topic/barber/" + saved.getBarberShop().getOwner().getId(),
                 Optional.of(payload)

@@ -38,6 +38,13 @@ export const barberShopService = {
     return data
   },
 
+  //Appointments
+
+  async getMyAppointments() {
+    const { data } = await api.get(`/appointments/my`)
+    return data
+  }, 
+
   // Services
   async getServices(shopId) {
     const { data } = await api.get(`/services/${shopId}`)
