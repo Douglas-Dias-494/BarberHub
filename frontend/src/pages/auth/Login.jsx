@@ -27,9 +27,6 @@ try {
     // Passando os campos individualmente como sua AuthProvider espera
     const user = await login(form.email, form.password)
 
-    console.log('Login realizado com sucesso:', user)
-    console.log('Role do usuário:', user.role)
-
     // 2. Redirecionamento inteligente baseado na role
     if (user.role === 'BARBER') {
       navigate('/barber/dashboard')

@@ -25,7 +25,6 @@ public class AppointmentController {
         return ResponseEntity.ok(created);
     }
 
-    // BARBEIRO LISTA PENDENTES
     @GetMapping("/pending/{shopId}")
     public ResponseEntity<List<AppointmentResponseDTO>> getPendingAppointments(
             @PathVariable Long shopId
@@ -46,7 +45,6 @@ public class AppointmentController {
         );
     }
 
-    // BARBEIRO LISTA CONFIRMADOS
     @GetMapping("/confirmed/{shopId}")
     public ResponseEntity<List<AppointmentResponseDTO>> getConfirmedAppointments(
             @PathVariable Long shopId
@@ -57,7 +55,6 @@ public class AppointmentController {
         );
     }
 
-    // BARBEIRO APROVA
     @PutMapping("/{appointmentId}/approve")
     public ResponseEntity<AppointmentResponseDTO> approve(
             @PathVariable Long appointmentId
@@ -68,7 +65,6 @@ public class AppointmentController {
         );
     }
 
-    // BARBEIRO REJEITA
     @PutMapping("/{appointmentId}/reject")
     public ResponseEntity<AppointmentResponseDTO> reject(
             @PathVariable Long appointmentId
@@ -79,7 +75,6 @@ public class AppointmentController {
         );
     }
 
-    // CLIENTE LISTA PRÓPRIOS AGENDAMENTOS
     @GetMapping("/my")
     public ResponseEntity<List<AppointmentResponseDTO>> myAppointments() {
 
