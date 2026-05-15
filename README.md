@@ -33,13 +33,25 @@ O **BarberHub** é uma plataforma Full-Stack de agendamentos para barbearias. O 
 
 ---
 
-## 🔒 Foco em Segurança e Arquitetura Backend
+## 🔒 Arquitetura de Segurança Backend (Boas Práticas Implementadas)
 
-A aplicação foi desenhada prezando pela robustez e resiliência das regras de negócio no servidor:
+O ecossistema de segurança do **BarberHub** foi desenvolvido utilizando o **Spring Security 6**, priorizando os padrões modernos de proteção para APIs RESTful:
 
-1. **Proteção de Endpoints Críticos:** Operações de escrita, como a aprovação (`/approve`) e rejeição (`/reject`) de agendamentos, possuem validações rígidas no ecossistema do backend, garantindo que apenas o estabelecimento dono da agenda possa alterar o estado do agendamento.
-2. **Isolamento de Ambiente de Testes:** Configuração de perfil `@ActiveProfiles("test")` integrada ao Maven. Ao executar `mvn clean test verify`, a aplicação valida os contextos e roda os testes utilizando o banco **H2 em memória**, impedindo chamadas indesejadas ou corrupção do banco PostgreSQL de produção.
-3. **Tratamento de Fuso Horário (Timezone Local):** Implementação de checagem de horários de abertura e fechamento baseada em `ZoneId.of("America/Sao_Paulo")`, blindando o sistema contra disparidades de horário UTC comumente encontradas ao implantar containers Docker em servidores internacionais (AWS, DigitalOcean, etc.).
+### 1. Autenticação Stateless (JWT)
+A API adota o modelo de autenticação baseada em tokens auto-contidos (**JWT**), injetando um `JwtAuthenticationFilter` antes do interpretador padrão de usuário e senha do Spring (`UsernamePasswordAuthenticationFilter`). A sessão é configurada como `SessionCreationPolicy.STATELESS`, o que delega a responsabilidade de autenticação ao token e zera o consumo de memória por sessões mantidas no servidor.
+
+### 2. Controle de Acesso Baseado em Funções (RBAC)
+O acesso aos recursos da API é blindado de forma granular, analisando tanto a rota quanto o método HTTP (`HttpMethod`):
+* **Rotas Públicas:** Endpoints de autenticação (`/auth/login`, `/auth/register`) e conexão de WebSockets (`/ws/**`) são liberados de forma explícita (`permitAll()`).
+* **Garantia de Escrita Governamental:** Apenas usuários com a autoridade `BARBER` podem realizar requisições `POST` para cadastrar barbearias ou catálogos de serviços (`/barbershops/**`, `/services/**`).
+* **Ações Compartilhadas:** Criação e manipulação de agendamentos (`/appointments/**`) exigem autenticação prévia de perfis específicos (`CLIENT` ou `BARBER`).
+
+### 3. Configuração Estrita de CORS e Desativação de CSRF
+* **CORS Limitado:** Diferente de configurações vulneráveis que utilizam padrões globais (`*`), a política de Cross-Origin Resource Sharing mapeia de forma explícita a origem do frontend local (`http://localhost:5173`), aceitando credenciais e limitando os métodos HTTP permitidos (`GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`).
+* **CSRF Protection:** Como a API não utiliza cookies baseados em sessões para autenticação (Stateful), a proteção a Cross-Site Request Forgery foi desabilitada via código (`csrf -> csrf.disable()`), uma prática recomendada para arquiteturas puramente orientadas a Tokens REST.
+
+### 4. Criptografia Resiliente de Senhas
+A infraestrutura utiliza a abstração `PasswordEncoder` acoplada ao algoritmo **BCrypt**, aplicando técnicas de *salting* automáticas para mitigar ataques de dicionário e tabelas de arco-íris (Rainbow Tables) antes da persistência de informações sensíveis no banco PostgreSQL.
 
 ---
 
