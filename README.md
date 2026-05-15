@@ -7,8 +7,9 @@ O **BarberHub** é uma plataforma Full-Stack de agendamentos para barbearias. O 
 ## 📸 Demonstração da Aplicação
 
 <div align="center">
-  <img src="./snapshots/home.png" alt="Listagem de Barbearias" width="400px" />
-  <img src="./snapshots/appointments.png" alt="Painel do Barbeiro" width="400px" />
+  <img src="./snapshots/login.png" alt="Listagem de Barbearias" width="400px" />
+  <img src="./snapshots/Agendamentos.png" alt="Painel do Barbeiro" width="400px" />
+  <img src="./snapshots/detalhes.png" alt="Painel do Barbeiro" width="400px" />
 </div>
 
 ---
